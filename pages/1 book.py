@@ -109,35 +109,36 @@ def main():
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        response = client.beta.threads.messages.create(
-            thread_id,
-            role="user",
-            content=prompt,
-        )
-
-        run = client.beta.threads.runs.create(
-            thread_id=thread_id,
-            assistant_id=secrets["assistant_api_key1"]
-        )
-
-        run_id = run.id
-
-        while True:
-            run = client.beta.threads.runs.retrieve(
-                thread_id=thread_id,
-                run_id=run_id
+        with st.spinner("응답을 기다리는 중..."):
+            response = client.beta.threads.messages.create(
+                thread_id,
+                role="user",
+                content=prompt,
             )
-            if run.status == "completed":
-                break
-            else:
-                time.sleep(2)
 
-        thread_messages = client.beta.threads.messages.list(thread_id)
+            run = client.beta.threads.runs.create(
+                thread_id=thread_id,
+                assistant_id=secrets["assistant_api_key1"]
+            )
 
-        msg = thread_messages.data[0].content[0].text.value
+            run_id = run.id
 
-        st.session_state.messages.append({"role": "assistant", "content": msg})
-        st.chat_message("assistant").write(msg)
+            while True:
+                run = client.beta.threads.runs.retrieve(
+                    thread_id=thread_id,
+                    run_id=run_id
+                )
+                if run.status == "completed":
+                    break
+                else:
+                    time.sleep(2)
+
+            thread_messages = client.beta.threads.messages.list(thread_id)
+
+            msg = thread_messages.data[0].content[0].text.value
+
+            st.session_state.messages.append({"role": "assistant", "content": msg})
+            st.chat_message("assistant").write(msg)
 
 if __name__ == "__main__":
     main()
