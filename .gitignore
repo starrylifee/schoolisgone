@@ -1,0 +1,6 @@
+*.ipynb
+*.png
+*.pdf
+*.csv
+*.json
+.streamlit/secrets.toml
