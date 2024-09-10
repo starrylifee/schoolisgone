@@ -22,10 +22,7 @@ def load_css():
     css = """
     <style>
         body, .stApp, .stChatFloatingInputContainer {
-            background-image: url("https://image.yes24.com/goods/71977468/XL") !important; /* 배경 이미지 설정 */
-            background-size: cover; /* 이미지 크기 조절 */
-            background-repeat: no-repeat; /* 이미지 반복 방지 */
-            background-attachment: fixed; /* 배경 고정 */
+            background-color: #FFFFFF !important; /* 흰색 배경 설정 */
         }
         .stApp::before {
             content: '';
@@ -34,8 +31,8 @@ def load_css():
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.5); /* 흰색 반투명 레이어 추가 */
-            z-index: -1; /* 배경 이미지 위에 놓이도록 설정 */
+            background-color: rgba(255, 255, 255, 1); /* 흰색 레이어 추가 */
+            z-index: -1; /* 레이어 설정 */
         }
         .stChatInputContainer {
             background-color: rgba(224, 247, 250, 0.8) !important; /* 입력 필드 배경색 반투명 설정 */
@@ -48,9 +45,21 @@ def load_css():
             padding: 20px;
             border-radius: 10px;
         }
+        /* 사이드바 이미지 하단에 배치 */
+        [data-testid="stSidebar"]::after {
+            content: '';
+            background-image: url("https://image.yes24.com/goods/71977468/XL");
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 200px; /* 이미지 높이 설정 */
+            display: block;
+            margin-top: auto; /* 이미지가 아래쪽에 위치하도록 설정 */
+        }
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
+
 
 def main():
     load_css()  # 배경색 스타일 로드
@@ -109,7 +118,7 @@ def main():
 
         if st.session_state.show_examples:
             st.subheader("질문 예시")
-            st.info("왜 학교가 없어지나요?")
+            st.info("갑수씨는 왜 인구조사를 피했을까요?")
             st.info("등장인물은 누구인가요?")
 
     # 스레드 ID 입력란을 자동으로 업데이트
