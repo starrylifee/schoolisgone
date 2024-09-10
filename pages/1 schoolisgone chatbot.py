@@ -22,13 +22,31 @@ def load_css():
     css = """
     <style>
         body, .stApp, .stChatFloatingInputContainer {
-            background-color: #E0F7FA !important; /* 옅은 하늘색으로 전체 배경색 변경 */
+            background-image: url("https://image.yes24.com/goods/71977468/XL") !important; /* 배경 이미지 설정 */
+            background-size: cover; /* 이미지 크기 조절 */
+            background-repeat: no-repeat; /* 이미지 반복 방지 */
+            background-attachment: fixed; /* 배경 고정 */
+        }
+        .stApp::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5); /* 흰색 반투명 레이어 추가 */
+            z-index: -1; /* 배경 이미지 위에 놓이도록 설정 */
         }
         .stChatInputContainer {
-            background-color: #E0F7FA !important; /* 입력 필드의 배경색도 변경 */
+            background-color: rgba(224, 247, 250, 0.8) !important; /* 입력 필드 배경색 반투명 설정 */
         }
         textarea {
-            background-color: #FFFFFF !important; /* 실제 입력 필드의 배경색도 흰색으로 변경 */
+            background-color: #FFFFFF !important; /* 실제 입력 필드의 배경색 흰색으로 변경 */
+        }
+        .chat-container {
+            background-color: rgba(255, 255, 255, 0.8); /* 반투명 흰색 박스 */
+            padding: 20px;
+            border-radius: 10px;
         }
     </style>
     """
@@ -91,15 +109,17 @@ def main():
 
         if st.session_state.show_examples:
             st.subheader("질문 예시")
-            st.info("미정")
-            st.info("몰랑")
+            st.info("왜 학교가 없어지나요?")
+            st.info("등장인물은 누구인가요?")
 
     # 스레드 ID 입력란을 자동으로 업데이트
     thread_id = st.session_state.thread_id
 
     st.title("우리 학교가 없어졌어요.")
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if prompt := st.chat_input():
         if not thread_id:
